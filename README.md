@@ -74,3 +74,5 @@ npx hardhat deploy --network rinkeby
 - [Front-end Smart Contract Lottery](https://github.com/smartcontractkit/full-blockchain-solidity-course-js#lesson-10-nextjs-smart-contract-lottery-full-stack--front-end): Patrick's repo for the Front-end part.
 - [Chainlink Keepers](https://docs.chain.link/docs/chainlink-keepers/introduction/): Used to pick winner AUTOMATICALLY.
 - [Chainlink VRF](https://docs.chain.link/docs/get-a-random-number/): Used to pick a winner RANDOMLY.
+- [Chainlink VRF addresses](https://docs.chain.link/docs/vrf-contracts/): Used to pick VRF address to deploy contract.
+- [Chainlink VRF subscription](https://vrf.chain.link): Used to create a VRF Chainlink subscription id.
