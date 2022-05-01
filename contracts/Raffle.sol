@@ -79,7 +79,6 @@ contract Raffle is VRFConsumerBaseV2 {
     * @dev 
     * 1 - Want it done Automatically
     * 2 - Want it to be really RANDOM
-    * 
     */
 
     /**
