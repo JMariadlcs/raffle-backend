@@ -3,8 +3,10 @@ This is a full stack decentralized Raffle App using Chainlink VRF and Chainlink 
 
 This repo contains all the stuff for the back-end part, the front-end is hold on [raffle-frontend](https://github.com/JMariadlcs/raffle-frontend).
 
-To achieve fully descentralization the [Front-End](ipfs://Qmciioouvm2EbHTfWexWEp74STzK1CeqPygCepoKmymgVE) has been uploaded to IPFS.
+To achieve fully descentralization the Front-End has been uploaded to IPFS: ipfs://Qmciioouvm2EbHTfWexWEp74STzK1CeqPygCepoKmymgVE. 
+
 The workshop followed to complete this repo is [this one](https://www.youtube.com/watch?v=8bMrko6iD9Q&t=5445s).
+
 
 ## Objetives
 
