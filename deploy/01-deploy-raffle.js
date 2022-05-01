@@ -1,3 +1,7 @@
+/* This Script is used to deploy Raffle.sol contract into a TESTNET
+     Deploy: 'yarn hardhat deploy --network rinkeby'
+    or 'npx hardhat deploy --network rinkeby' */
+
 const { ethers } = require("hardhat")
 
 // Parameters for VRFCoordinator
