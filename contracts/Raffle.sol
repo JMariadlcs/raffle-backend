@@ -92,7 +92,7 @@ contract Raffle is VRFConsumerBaseV2 {
     */
     function checkUpkeep(bytes memory /* checkData */) public view returns(bool upkeedNeeded, bytes memory /*performData*/) {
         bool isOpen = RaffleState.Open == s_raffleState; // 2 - check if its open
-        bool timePassed = (block.timestamp - s_lastTimeStamp > i_interval); // 1 - true if timePassed is > interval
+        bool timePassed = (block.timestamp - s_lastTimeStamp) > i_interval; // 1 - true if timePassed is > interval
         bool hasBalance = address(this).balance > 0; // 3 - check if contract has ETH
         bool hasPlayers = s_players.length > 0; // 4 - check if there is al least 1 player
 
@@ -130,6 +130,7 @@ contract Raffle is VRFConsumerBaseV2 {
 
         // RESET RAFFLE and PAY WINNER
         s_players = new address payable[](0); // reset players array
+        s_raffleState = RaffleState.Open;
         s_lastTimeStamp = block.timestamp; 
         (bool success, ) = recentWinner.call{value: address(this).balance}(""); // We pay winner (SEND ALL THE ETH IN THE CONTRACT)
         if (!success) { // check if transaction succeded
