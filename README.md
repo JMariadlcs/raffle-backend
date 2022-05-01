@@ -1,6 +1,6 @@
 # raffle-full-stack
 
-This is a full stack decentralized Raffle App using Solidity, Next.js and VRF Chainlink from workshop from Chainlink Hackathon Spring 2022.
+This is a full stack decentralized Raffle App using Chainlink VRF and Chainlink Keepers, Solidity and Next.js from workshop from Chainlink Hackathon Spring 2022.
 
 ## Objetives
 

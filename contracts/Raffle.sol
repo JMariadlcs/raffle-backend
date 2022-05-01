@@ -4,6 +4,7 @@ pragma solidity ^0.8.7;
 
 error Raffle__SendMoreToEnterRaffle();
 error Raffle__RaffleNotOpen();
+error Raffle__UpkeepNotNeeded();
 
 contract Raffle {
     
@@ -61,19 +62,36 @@ contract Raffle {
     */
 
     /**
-    * @notice Functions check the 4 below requirements, if fulfilled -> pick a Winner
+    * @notice Function to check the 4 below requirements, if fulfilled -> pick a Winner
     * @dev 
     * 1 - Be true after some interval
     * 2 - Want the lottery to be open
     * 3 - The contract has ETH
-    * 4- Keepers has LINK
+    * 4 - There is al least 1 player
+    * 5- Keepers has LINK
     */
     function checkUpkeep(bytes memory /* checkData */) public view returns(bool upkeedNeeded, bytes memory /*performData*/) {
         bool isOpen = RaffleState.Open == s_raffleState; // 2 - check if its open
         bool timePassed = (block.timestamp - s_lastTimeStamp > i_interval); // 1 - true if timePassed is > interval
         bool hasBalance = address(this).balance > 0; // 3 - check if contract has ETH
-        upkeedNeeded = (timePassed && isOpen && hasBalance); // EVERY REQUIREMENT IS FULFILLED
+        bool hasPlayers = s_players.length > 0; // 4 - check if there is al least 1 player
+
+        upkeedNeeded = (timePassed && isOpen && hasBalance && hasPlayers); // EVERY REQUIREMENT IS FULFILLED
         return (upkeedNeeded,"0x0");
+    }
+
+    /**
+    * @notice Functions to actually pick a winner -> Chainlink keepers to do it Automatically and decentralized
+    * @dev 
+    */
+    function performUpkeep(bytes calldata /* performData */) external {
+        (bool upkeepNeeded, ) = checkUpkeep(""); //checkUpkeep returns 2 parameters but we only need first 1
+        if (!upkeepNeeded) { // requirements not met
+            revert Raffle__UpkeepNotNeeded();
+        }
+
+        // REQUIREMENTS MET! -> PICK A WINNER
+        s_raffleState = RaffleState.Calculating; // Change Raffle State
     }
 
 
