@@ -56,6 +56,19 @@ or
 npx hardhat compile
 ```
 
+## How to deploy
+
+- DISCLAIMER: Always deploy first LOCALLY
+
+- Deploy on Rinkeby:
+```bash
+yarn hardhat deploy --network rinkeby
+```
+or
+```bash
+npx hardhat deploy --network rinkeby
+```
+
 ## Resources 
 - [Hardhat Smart Contract Lottery](https://github.com/PatrickAlphaC/hardhat-smartcontract-lottery-fcc): Patrick's repo that we are building.
 - [Front-end Smart Contract Lottery](https://github.com/smartcontractkit/full-blockchain-solidity-course-js#lesson-10-nextjs-smart-contract-lottery-full-stack--front-end): Patrick's repo for the Front-end part.
