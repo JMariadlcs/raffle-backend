@@ -2,6 +2,8 @@
 
 pragma solidity ^0.8.7;
 
+import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol"; // to work with COORDINATOR and VRF
+
 error Raffle__SendMoreToEnterRaffle();
 error Raffle__RaffleNotOpen();
 error Raffle__UpkeepNotNeeded();
@@ -22,13 +24,27 @@ contract Raffle {
     uint256 public s_lastTimeStamp; // to get last time Raffle State changed
     address payable[] public s_players; // to have raffle players
 
+    /// @notice VRF Variables
+    VRFCoordinatorV2Interface public immutable i_vrfCoordinator; // coordinator for working with Chainlink VRF 
+    bytes32 public immutable i_gasLane;
+    uint64 public immutable i_subscriptionId;
+    uint32 public immutable i_callbackGasLimit;
+    uint16 public constant REQUEST_CONFIRMATIONS = 3; // how many blocks are needed to be considered complete
+    uint32 public constant NUM_WORDS = 1; // how many random numbers we want to get
+
     /// @notice Events
     event RaffleEnter(address indexed player); // when a user enters Raffle
 
-    constructor(uint256 entranceFee, uint256 interval) {
+    constructor(uint256 entranceFee, uint256 interval, address vrfCoordinatorV2, bytes32 gasLane, uint64 subscriptionId, uint32 callbackGasLimit) {
         i_entranceFee = entranceFee;
         i_interval = interval;
         s_lastTimeStamp = block.timestamp;
+
+        //VRF Variables
+        i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorV2); // interface(address) -> contract, so i_vrfCoordinator is now a contract (we can interat with it)
+        i_gasLane = gasLane; // keyHash -> how much gas is max to get Random Number (price per gas)
+        i_subscriptionId = subscriptionId;
+        i_callbackGasLimit = callbackGasLimit; // when Chainlink node respond with the random number it uses gas - max gas amount
     }
 
     /**
