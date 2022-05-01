@@ -3,12 +3,14 @@
 pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol"; // to work with COORDINATOR and VRF
+import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol"; // to use functionalities for Chainlink VRF
 
 error Raffle__SendMoreToEnterRaffle();
 error Raffle__RaffleNotOpen();
 error Raffle__UpkeepNotNeeded();
+error Raffle__TransferFailed();
 
-contract Raffle {
+contract Raffle is VRFConsumerBaseV2 {
     
     /// @notice Enums
     // To let user enter the Raffle or not
@@ -23,6 +25,7 @@ contract Raffle {
     uint256 public immutable i_interval; // interval when Raffle State should change
     uint256 public s_lastTimeStamp; // to get last time Raffle State changed
     address payable[] public s_players; // to have raffle players
+    address public s_recentWinner; // most recent Winner
 
     /// @notice VRF Variables
     VRFCoordinatorV2Interface public immutable i_vrfCoordinator; // coordinator for working with Chainlink VRF 
@@ -34,8 +37,10 @@ contract Raffle {
 
     /// @notice Events
     event RaffleEnter(address indexed player); // when a user enters Raffle
+    event RequestedRaffleWinner(uint256 indexed requestId); // when VRF gives a random number (winner)
+    event WinnerPicked(address indexed winner); // winner is picked
 
-    constructor(uint256 entranceFee, uint256 interval, address vrfCoordinatorV2, bytes32 gasLane, uint64 subscriptionId, uint32 callbackGasLimit) {
+    constructor(uint256 entranceFee, uint256 interval, address vrfCoordinatorV2, bytes32 gasLane, uint64 subscriptionId, uint32 callbackGasLimit) VRFConsumerBaseV2(vrfCoordinatorV2) {
         i_entranceFee = entranceFee;
         i_interval = interval;
         s_lastTimeStamp = block.timestamp;
@@ -97,8 +102,7 @@ contract Raffle {
     }
 
     /**
-    * @notice Functions to actually pick a winner -> Chainlink keepers to do it Automatically and decentralized
-    * @dev 
+    * @notice Functions to actually pick a random NUMBER -> Chainlink keepers to do it Automatically and decentralized
     */
     function performUpkeep(bytes calldata /* performData */) external {
         (bool upkeepNeeded, ) = checkUpkeep(""); //checkUpkeep returns 2 parameters but we only need first 1
@@ -106,11 +110,32 @@ contract Raffle {
             revert Raffle__UpkeepNotNeeded();
         }
 
-        // REQUIREMENTS MET! -> PICK A WINNER
+        // REQUIREMENTS MET! -> PICK A WINNER (random NUMBER) -> use Chainlink VRF
         s_raffleState = RaffleState.Calculating; // Change Raffle State
+        uint256 requestId = i_vrfCoordinator.requestRandomWords(i_gasLane, i_subscriptionId, REQUEST_CONFIRMATIONS, i_callbackGasLimit, NUM_WORDS);
+        emit RequestedRaffleWinner(requestId);    
     }
 
+    /**
+    * @notice Functions to actually pick a winner -> Pass from Chanlink VRF random NUMBER to WINNER
+    * @dev 
+    * - randomWords -> array of randomWords
+    * - should RESET RAFFLE
+    * - should pay winner
+    * - use .call() to send ETH (best way to do it)
+    */
+    function fulfillRandomWords(uint256 /* requestId */, uint256[] memory randomWords) internal override {
+        uint256 indexOfWinner = randomWords[0] % s_players.length; // just in case random number is very long we apply modular function
+        address payable recentWinner = s_players[indexOfWinner]; // WINNER PICKED
+        s_recentWinner = recentWinner; // get view Winner address from outside the contract
 
-
-
+        // RESET RAFFLE and PAY WINNER
+        s_players = new address payable[](0); // reset players array
+        s_lastTimeStamp = block.timestamp; 
+        (bool success, ) = recentWinner.call{value: address(this).balance}(""); // We pay winner (SEND ALL THE ETH IN THE CONTRACT)
+        if (!success) { // check if transaction succeded
+            revert Raffle__TransferFailed();
+        }
+        emit WinnerPicked(recentWinner);
+    }
 }
