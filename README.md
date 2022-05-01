@@ -52,3 +52,12 @@ npm install @chainlink/contracts
 ```bash
 npm install dotenv --save
 ```
+
+## How to compile
+```bash
+yarn hardhat compile
+```
+or
+```bash
+npx hardhat compile
+```
