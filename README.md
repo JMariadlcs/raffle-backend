@@ -59,3 +59,4 @@ npx hardhat compile
 ## Resources 
 - [Hardhat Smart Contract Lottery](https://github.com/smartcontractkit/full-blockchain-solidity-course-js#lesson-9-hardhat-smart-contract-lottery): Patrick's repo that we are building.
 - [Front-end Smart Contract Lottery](https://github.com/smartcontractkit/full-blockchain-solidity-course-js#lesson-10-nextjs-smart-contract-lottery-full-stack--front-end): Patrick's repo for the Front-end part.
+- [Chainlink Keepers](https://docs.chain.link/docs/chainlink-keepers/introduction/): Used to pick winner AUTOMATICALLY.
