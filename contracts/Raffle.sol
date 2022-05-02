@@ -44,6 +44,7 @@ contract Raffle is VRFConsumerBaseV2 {
         i_entranceFee = entranceFee;
         i_interval = interval;
         s_lastTimeStamp = block.timestamp;
+        s_raffleState = RaffleState.Open;
 
         //VRF Variables
         i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorV2); // interface(address) -> contract, so i_vrfCoordinator is now a contract (we can interat with it)
