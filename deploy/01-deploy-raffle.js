@@ -9,8 +9,8 @@ const ENTRANCE_FEE = ethers.utils.parseEther("0.1"); // fee for Raffle participa
 const INTERVAL = 300; // interval to pick a winner (in seconds)
 const VRF_CoordinatorAddress = "0x6168499c0cFfCaCD319c818142124B7A15E857ab";
 const gasLane = "0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc";
-const subscriptionId = "3587";
-const callbackGasLimit = "50000";
+const subscriptionId = "3595";
+const callbackGasLimit = "500000";
 
 module.exports = async({getNamedAccounts, deployments}) => {
     const { deploy, log } = deployments
