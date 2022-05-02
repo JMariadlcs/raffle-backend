@@ -88,7 +88,7 @@ NOTICE: check that Subscription has enough funds (LINK)
 To register into Chainlink Keepers (To execute lottery automatically):
 1. Go to [Chainlink Keepers](https://keepers.chain.link/).
 2. Click on 'register new keeper'.
-3. Fill up the data.
+3. Fill up the data (set gasLimit > 500000).
 
 ## Resources 
 - [Hardhat Smart Contract Lottery](https://github.com/PatrickAlphaC/hardhat-smartcontract-lottery-fcc): Patrick's repo that we are building.
