@@ -8,7 +8,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
 
 error Raffle__SendMoreToEnterRaffle();
 error Raffle__RaffleNotOpen();
-error Raffle__UpkeepNotNeeded();
+error Raffle__UpkeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
 error Raffle__TransferFailed();
 
 /**@title A Raffle Smart Contract
@@ -122,7 +122,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     function performUpkeep(bytes calldata /* performData */) external override {
         (bool upkeepNeeded, ) = checkUpkeep(""); //checkUpkeep returns 2 parameters but we only need first 1
         if (!upkeepNeeded) { // requirements not met
-            revert Raffle__UpkeepNotNeeded();
+            revert Raffle__UpkeepNotNeeded(address(this).balance, s_players.length, uint256(s_raffleState));
         }
 
         // REQUIREMENTS MET! -> PICK A WINNER (random NUMBER) -> use Chainlink VRF
