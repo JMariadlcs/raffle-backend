@@ -2,7 +2,7 @@
      Deploy: 'yarn hardhat deploy --network rinkeby'
     or 'npx hardhat deploy --network rinkeby' */
 
-const { ethers } = require("hardhat")
+const { ethers, network } = require("hardhat")
 
 // Parameters for VRFCoordinator
 const ENTRANCE_FEE = ethers.utils.parseEther("0.1"); // fee for Raffle participation
@@ -23,7 +23,7 @@ module.exports = async({getNamedAccounts, deployments}) => {
         from: deployer,
         args: args,
         log: true,
-        waitConfirmations: 6,
+        waitConfirmations: network.config.blockConfirmations || 1,
     })
 }
 
