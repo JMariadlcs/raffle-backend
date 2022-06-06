@@ -2,22 +2,40 @@
      Deploy: 'yarn hardhat deploy --network rinkeby'
     or 'npx hardhat deploy --network rinkeby' */
 
-const { ethers, network } = require("hardhat")
+const { ethers, network } = require("hardhat");
+const { developmentChains, networkConfig } = require("../helper-hardhat-config");
 
-// Parameters for VRFCoordinator
-const ENTRANCE_FEE = ethers.utils.parseEther("0.1"); // fee for Raffle participation
-const INTERVAL = 300; // interval to pick a winner (in seconds)
-const VRF_CoordinatorAddress = "0x6168499c0cFfCaCD319c818142124B7A15E857ab";
-const gasLane = "0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc";
-const subscriptionId = "3595";
-const callbackGasLimit = "500000";
+const VRF_SUB_FUND_AMOUNT = ethers.utils.parseEther("30")
 
 module.exports = async({getNamedAccounts, deployments}) => {
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
+    const chainId = network.config.chainId
+    let vrfCoordinatorV2Address, subscriptionId
     
+    if (developmentChains.includes(network.name)) { // Select VRFCoordinatorV2Mock in case we are deploying on a development chain
+        const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
+        vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
+        const transactionResponse = await vrfCoordinatorV2Mock.createSubscription() // create VRF SubscriptionId
+        const transactionReceipt = await transactionResponse.wait(1) // inside `transactionReceipt`is the SubscriptionId
+        subscriptionId = transactionReceipt.events[0].args.subId
+
+        // We need to fund de subscriptionID
+        await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, VRF_SUB_FUND_AMOUNT)
+
+    } else { // not localnetwork -> pick from networkConfig
+        vrfCoordinatorV2Address = networkConfig[chainId]["vrfCoordinatorV2"]
+        subscriptionId = networkConfig[chainId]["subscriptionId"]
+    }
+
+    // Parameters for VRFCoordinator
+    const ENTRANCE_FEE = networkConfig[chainId]["entranceFee"] // fee for Raffle participation
+    const INTERVAL = networkConfig[chainId]["interval"] // interval to pick a winner (in seconds)
+    const gasLane = networkConfig[chainId]["gasLane"]
+    const callbackGasLimit = networkConfig[chainId]["callbackGasLimit"]
+
     // We need the Contract's arguments for deploy
-    const args = [ENTRANCE_FEE, INTERVAL, VRF_CoordinatorAddress, gasLane, subscriptionId, callbackGasLimit]
+    const args = [ENTRANCE_FEE, INTERVAL, vrfCoordinatorV2Address, gasLane, subscriptionId, callbackGasLimit]
     // Deploy Raffle.sol Smart Contract
     const Raffle = await deploy("Raffle", {
         from: deployer,
@@ -25,6 +43,14 @@ module.exports = async({getNamedAccounts, deployments}) => {
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
+
+    // Verify contract on Etherscan if we are not deploying on a development chain
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+        log("Verifying...")
+        await verify(Raffle.address, arguments)
+    }
+
+    log("----------------------------------------------------")
 }
 
 module.exports.tags = ["all", "raffle"]

@@ -26,7 +26,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     }
 
     /// @notice State Variables
-    uint256 private i_entranceFee; // Fee to join the Raffle (Immutable: unchangeable and cheaper)
+    uint256 private s_entranceFee; // Fee to join the Raffle (Immutable: unchangeable and cheaper)
     uint256 private immutable i_interval; // interval when Raffle State should change
     address payable[] private s_players; // to have raffle players
 
@@ -49,7 +49,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     event WinnerPicked(address indexed winner); // winner is picked
 
     constructor(uint256 entranceFee, uint256 interval, address vrfCoordinatorV2, bytes32 gasLane, uint64 subscriptionId, uint32 callbackGasLimit) VRFConsumerBaseV2(vrfCoordinatorV2) {
-        i_entranceFee = entranceFee;
+        s_entranceFee = entranceFee;
         i_interval = interval;
         s_lastTimeStamp = block.timestamp;
         s_raffleState = RaffleState.Open;
@@ -71,7 +71,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     */
     function enterRaffle() public payable {
         // require(msg.value > i_entranceFee, "Not enough money sent."); ->  Better use custom error
-        if (msg.value < i_entranceFee) {
+        if (msg.value < s_entranceFee) {
             revert Raffle__SendMoreToEnterRaffle();
         }
 
@@ -186,7 +186,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     }
 
     function getEntranceFee() public view returns (uint256) {
-        return i_entranceFee;
+        return s_entranceFee;
     }
 
     function getNumberOfPlayers() public view returns (uint256) {
