@@ -19,12 +19,12 @@ contract Raffle is VRFConsumerBaseV2 {
         Calculating
     }
 
-    /// @notice Variables
+    /// @notice State Variables
     RaffleState public s_raffleState; // s_ because 'store' and we are going to change the value
-    uint256 public immutable i_entranceFee; // Fee to join the Raffle (Immutable: unchangeable and cheaper)
+    uint256 private i_entranceFee; // Fee to join the Raffle (Immutable: unchangeable and cheaper)
     uint256 public immutable i_interval; // interval when Raffle State should change
     uint256 public s_lastTimeStamp; // to get last time Raffle State changed
-    address payable[] public s_players; // to have raffle players
+    address payable[] private s_players; // to have raffle players
     address public s_recentWinner; // most recent Winner
 
     /// @notice VRF Variables
@@ -56,10 +56,12 @@ contract Raffle is VRFConsumerBaseV2 {
     /**
     * @notice Function for users to join the Raffle
     * @dev 
+    * - Payable function because it is receiving ETH
     * - Check if msg.value is correct
     * - Check state of Raffle -> Open or Calculating
+    * - Emit event
     */
-    function enterRaffle() external payable {
+    function enterRaffle() public payable {
         // require(msg.value > i_entranceFee, "Not enough money sent."); ->  Better use custom error
         if (msg.value < i_entranceFee) {
             revert Raffle__SendMoreToEnterRaffle();
@@ -119,6 +121,7 @@ contract Raffle is VRFConsumerBaseV2 {
     /**
     * @notice Functions to actually pick a winner -> Pass from Chanlink VRF random NUMBER to WINNER
     * @dev 
+    * -> should be internal override -> override implemented fulfillRandomWords in VRFConsumerBasev2
     * - randomWords -> array of randomWords
     * - should RESET RAFFLE
     * - should pay winner
@@ -138,5 +141,14 @@ contract Raffle is VRFConsumerBaseV2 {
             revert Raffle__TransferFailed();
         }
         emit WinnerPicked(recentWinner);
+    }
+
+    // GETTER FUNCTIONS
+    function getEntranceFee() public view returns (uint256) {
+        return i_entranceFee;
+    }
+
+    function getPlayer(uint256 index) public view returns(address) {
+        return s_players[index];
     }
 }

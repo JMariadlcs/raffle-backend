@@ -98,6 +98,21 @@ or
 npx hardhat deploy --network rinkeby
 ```
 
+## HOW TOT DEPLOY
+
+If you want to use [Hardhat shorthand](https://hardhat.org/guides/shorthand):
+
+```bash
+yarn global add hardhat-shorthand
+```
+
+You can now run Hardhat commands by:
+
+```bash
+hh compile
+hh deploy
+```
+
 ## Add Chainlink VRF Consumers and Keepers
 
 In order that our Contract works correctly with Chainlink VRF we need to add our Smart Contract Address as VRF consumer. To do so:
