@@ -1,3 +1,7 @@
+/* This Script is used to deploy update frontend contract addresses and ABI
+     Deploy: 'yarn hardhat deploy --network rinkeby'
+    or 'npx hardhat deploy --network rinkeby' */
+
 const { frontEndContractsFile, frontEndAbiFile } = require("../helper-hardhat-config")
 const fs = require("fs")
 const { network } = require("hardhat")
