@@ -24,7 +24,7 @@ developmentChains.includes(network.name) ? describe.skip : // case WE ARE in a d
         describe("fulfillRandomWords", function() {
             it("works with real Chainlink Keepers and Chainlink VRF, a random winner is piscked", async function() {
                 // enter de raffle
-                const startingTimeStamp = await raffle.getLatestTimeStamp()
+                const startingTimeStamp = await raffle.getLastTimeStamp()
                 const accounts = await ethers.getSigners()
 
                 await new Promise(async (resolve, reject) => {
