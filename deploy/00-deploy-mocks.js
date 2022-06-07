@@ -20,12 +20,14 @@ module.exports = async function ({getNamedAccounts, deployments}) {
             log: true,
             args: [BASE_FEE, GAS_PRICE_LINK],
         })
+
+        log("Mocks Deployed!")
+        log("----------------------------------------------------------")
+        log("You are deploying to a local network, you'll need a local network running to interact: 'yarn hardhat node'")
+        log("Please run `yarn hardhat console --network localhost` to interact with the deployed smart contracts!")
+        log("----------------------------------------------------------")
     }
 
-    log("Mocks Deployed!")
-    log("----------------------------------------------------------")
-    log("You are deploying to a local network, you'll need a local network running to interact: 'yarn hardhat node'")
-    log("Please run `yarn hardhat console --network localhost` to interact with the deployed smart contracts!")
-    log("----------------------------------------------------------")
+    
 }
 module.exports.tags = ["all", "mocks"]

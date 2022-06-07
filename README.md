@@ -84,22 +84,6 @@ npx hardhat compile
 
 ## HOW TOT DEPLOY
 
--   DISCLAIMER: Always deploy first LOCALLY
-
--   Deploy on Rinkeby:
-
-```bash
-yarn hardhat deploy --network rinkeby
-```
-
-or
-
-```bash
-npx hardhat deploy --network rinkeby
-```
-
-## HOW TOT DEPLOY
-
 If you want to use [Hardhat shorthand](https://hardhat.org/guides/shorthand):
 
 ```bash
@@ -127,6 +111,8 @@ To register into Chainlink Keepers (To execute lottery automatically):
 1. Go to [Chainlink Keepers](https://keepers.chain.link/).
 2. Click on 'register new keeper'.
 3. Fill up the data (set gasLimit > 500000).
+
+**NOTICE** make sure to deploy contracts with its corresponding subID depending on the chain we are deploying, check [helper-hardhat-config.js](https://github.com/JMariadlcs/raffle-full-stack/blob/main/helper-hardhat-config.js)
 
 ## Resources
 

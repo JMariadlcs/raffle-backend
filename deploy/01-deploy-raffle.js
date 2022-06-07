@@ -4,6 +4,7 @@
 
 const { ethers, network } = require("hardhat");
 const { developmentChains, networkConfig } = require("../helper-hardhat-config");
+const { verify } = require("../utils/verify")
 
 const VRF_SUB_FUND_AMOUNT = ethers.utils.parseEther("30")
 
@@ -35,11 +36,11 @@ module.exports = async({getNamedAccounts, deployments}) => {
     const callbackGasLimit = networkConfig[chainId]["callbackGasLimit"]
 
     // We need the Contract's arguments for deploy
-    const args = [ENTRANCE_FEE, INTERVAL, vrfCoordinatorV2Address, gasLane, subscriptionId, callbackGasLimit]
+    const arguments = [ENTRANCE_FEE, INTERVAL, vrfCoordinatorV2Address, gasLane, subscriptionId, callbackGasLimit]
     // Deploy Raffle.sol Smart Contract
     const Raffle = await deploy("Raffle", {
         from: deployer,
-        args: args,
+        args: arguments,
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
