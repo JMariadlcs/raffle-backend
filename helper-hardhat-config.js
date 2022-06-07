@@ -31,9 +31,12 @@ const networkConfig = {
 }
 
 const developmentChains = ["hardhat", "localhost"]
-
+const frontEndContractsFile = "../nextjs-full-stack/constants/contractAddresses.json"
+const frontEndAbiFile = "../nextjs-full-stack/constants/abi.json"
 
 module.exports = {
     networkConfig,
     developmentChains,
+    frontEndContractsFile,
+    frontEndAbiFile
 }
