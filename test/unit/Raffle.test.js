@@ -166,10 +166,10 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
                                             .toString()
                                     )
                                 )
-                            resolve()
                         } catch (e) {
                             reject(e)
                         }
+                        resolve()
                     })
 
                     // Section where the Event is emitted for the part above listening to it at the same time
@@ -183,6 +183,4 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
                 })
             })
         })
-
-        
     })
