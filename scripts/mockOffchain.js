@@ -1,4 +1,5 @@
 // Script to Simulate Chainlink VRF and Chainlink keepers in local network (off-chain)
+// to run: 'yarn hardhat run scripts/mockOffchain.js --network localhost'
 
 const { ethers, network } = require("hardhat")
 
