@@ -106,16 +106,16 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     * 4 - There is al least 1 player
     * 5- Keepers has LINK
     */
-    function checkUpkeep(bytes memory /* checkData */) public view override returns(bool upkeedNeeded, bytes memory /*performData*/) {
+    function checkUpkeep( bytes memory /* checkData */) public view override returns (bool upkeepNeeded, bytes memory /* performData */) {
         bool isOpen = RaffleState.Open == s_raffleState; // 2 - check if its open
         bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval); // 1 - true if timePassed is > interval
-        bool hasBalance = address(this).balance > 0; // 3 - check if contract has ETH
         bool hasPlayers = s_players.length > 0; // 4 - check if there is al least 1 player
-
-        upkeedNeeded = (timePassed && isOpen && hasBalance && hasPlayers); // EVERY REQUIREMENT IS FULFILLED -> true
-        return (upkeedNeeded,"0x0");
+        bool hasBalance = address(this).balance > 0; // 3 - check if contract has ETH
+        upkeepNeeded = (timePassed && isOpen && hasBalance && hasPlayers); // EVERY REQUIREMENT IS FULFILLED -> true
+        return (upkeepNeeded, "0x0"); 
     }
 
+    
     /**
     * @notice Functions to actually pick a random NUMBER -> Chainlink keepers to do it Automatically and decentralized
     */
