@@ -12,7 +12,7 @@ The used repos from Patricks are the followings:
 
 1. [Hardhat Smart Contract Lottery](https://github.com/PatrickAlphaC/hardhat-smartcontract-lottery-fcc): Patrick's repo that we are building.
 2. [Front-end Smart Contract Lottery](https://github.com/PatrickAlphaC/nextjs-smartcontract-lottery-fcc): Patrick's repo for the Front-end part.
-3. [Patricks Hardhat course video](https://github.com/PatrickAlphaC/hardhat-fund-me-fcc).
+3. [Patricks Hardhat course video](https://www.youtube.com/watch?v=gyMwXuJrbJQ&t=15996s).
 
 ## OBJETIVES
 
