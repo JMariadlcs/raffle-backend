@@ -97,6 +97,39 @@ hh compile
 hh deploy
 ```
 
+## HOW TO TEST
+
+Two types of tests are created for this project:
+
+1. "Unit tests" inside [unit](https://github.com/JMariadlcs/raffle-full-stack/tree/main/test/unit): used to test functions separately
+2. "Integration tests" inside [staging](https://github.com/JMariadlcs/raffle-full-stack/tree/main/test/staging): used to test entire contracts
+
+To execute tests **unit tests** (on development chain):
+
+```bash
+yarn hardhat test
+```
+
+and to see test coverage:
+
+```bash
+yarn hardhat coverage
+```
+
+To execute tests **integrated tests** (on testnet):
+
+**REMINDER**: contract should be deployed with correct chainId on Chainlink VRF and must be added to Chainlink Keepers
+
+```bash
+yarn hardhat test --network rinkeby
+```
+
+and to see test coverage:
+
+```bash
+yarn hardhat coverage
+```
+
 ## Add Chainlink VRF Consumers and Keepers
 
 In order that our Contract works correctly with Chainlink VRF we need to add our Smart Contract Address as VRF consumer. To do so:
