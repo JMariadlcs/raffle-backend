@@ -51,7 +51,7 @@ module.exports = {
     },
 },
 mocha: {
-  // timeout: 200000, // 200 seconds max
+  timeout: 200000, // 200 seconds max
 },
   solidity: "0.8.7",
 };
