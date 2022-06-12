@@ -7,13 +7,13 @@ const { developmentChains, networkConfig } = require("../helper-hardhat-config")
 const { verify } = require("../utils/verify")
 
 const VRF_SUB_FUND_AMOUNT = ethers.utils.parseEther("30")
-console.log("eee")
+
 module.exports = async({getNamedAccounts, deployments}) => {
     const { deploy, log } = deployments
     const { deployer } = await getNamedAccounts()
     const chainId = network.config.chainId
     let vrfCoordinatorV2Address, subscriptionId
-    console.log("chainId" + chainId)
+
     if (developmentChains.includes(network.name)) { // Select VRFCoordinatorV2Mock in case we are deploying on a development chain
         const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock")
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address
@@ -44,13 +44,13 @@ module.exports = async({getNamedAccounts, deployments}) => {
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
-/*
+
     // Verify contract on Etherscan if we are not deploying on a development chain
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying...")
         await verify(Raffle.address, arguments)
     }
-*/
+
     log("----------------------------------------------------")
 }
 

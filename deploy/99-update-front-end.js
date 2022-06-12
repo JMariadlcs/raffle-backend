@@ -22,6 +22,7 @@ async function updateAbi() {
 
 async function updateContractAddresses() {
     const raffle = await ethers.getContract("Raffle")
+    console.log("heeyyy")
     const contractAddresses = JSON.parse(fs.readFileSync(frontEndContractsFile, "utf8"))
     if (network.config.chainId.toString() in contractAddresses) {
         console.log("Writing contract")

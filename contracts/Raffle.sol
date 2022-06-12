@@ -111,6 +111,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
         bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval); // 1 - true if timePassed is > interval
         bool hasPlayers = s_players.length > 0; // 4 - check if there is al least 1 player
         bool hasBalance = address(this).balance > 0; // 3 - check if contract has ETH
+        
         upkeepNeeded = (timePassed && isOpen && hasBalance && hasPlayers); // EVERY REQUIREMENT IS FULFILLED -> true
         return (upkeepNeeded, "0x0"); 
     }
